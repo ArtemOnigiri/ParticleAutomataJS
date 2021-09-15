@@ -34,7 +34,14 @@ let MAX_LINKS_PER_COLOR = [];
 let links = [];
 let fields = [];
 
-startNew();
+let settingRuleSize = 3;
+
+const settingRange = document.getElementById('setting-range');
+const rangeValue = document.getElementById('setting-range-value');
+settingRange.oninput = () => {
+	settingRuleSize = settingRange.value;
+	rangeValue.textContent = settingRuleSize;
+};
 
 // COUPLINGS = [
 // 	[1, 1, -1],
@@ -76,10 +83,12 @@ startNew();
 
 if(location.hash) {
 	let hash = location.hash.substring(1).split('-');
-	console.log(...hash);
 	let c = 0;
-	RULE_SIZE = hash[c];
-	generateRules();
+	settingRuleSize = ~~hash[c];
+	RULE_SIZE = settingRuleSize;
+	settingRange.value = RULE_SIZE;
+	rangeValue.textContent = RULE_SIZE;
+	startNew();
 	c++;
 	for (let i = 0; i < RULE_SIZE; i++) {
 		MAX_LINKS[i] = (hash[c] >> (i * 2)) & 3;
@@ -98,6 +107,9 @@ if(location.hash) {
 		c++;
 	}
 	history.pushState(null, null, ' ');
+}
+else {
+	startNew();
 }
 
 let frame = 0;
@@ -126,6 +138,7 @@ function generateNodes() {
 }
 
 function generateRules() {
+	RULE_SIZE = settingRuleSize;
 	MAX_LINKS = [];
 	COUPLINGS = [];
 	MAX_LINKS_PER_COLOR = [];
