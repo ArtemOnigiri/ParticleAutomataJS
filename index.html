@@ -1,0 +1,26 @@
+<style>
+    * {
+        margin: 0px;
+        font-family: Helvetica, Arial, sans-serif;
+    }
+    .setting-option {
+        display: inline-block;
+        background-color: rgba(80, 150, 255, 0.5);
+        border-radius: 0.5vw;
+        margin: 2px;
+        padding: 0.5vw;
+        color: #fff;
+        font-size: 1vw;
+        user-select: none;
+    }
+    .setting-option:hover {
+        background-color: #26f;
+        cursor: pointer;
+    }
+</style>
+<canvas id="cnv"></canvas>
+<script type="text/javascript" src="game.js"></script>
+<div style="position: absolute; top: 1vw; left: 1vw">
+    <div class="setting-option" onclick="startNew()">Generate new</div>
+    <div class="setting-option" onclick="copyRules()">Copy link</div>
+</div>
