@@ -97,7 +97,7 @@ if(location.hash) {
 		}
 		c++;
 	}
-	location.hash = '';
+	history.pushState(null, null, ' ');
 }
 
 let frame = 0;
