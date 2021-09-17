@@ -24,14 +24,14 @@
 
   const r = 5;
   let nodeCount = 750;
-  let MAX_DIST = 75;
+  let MAX_DIST = 100;
   let speedMultiplier = 4;
   const BORDER = 10;
   let selectedId = 0;
 
   const maxDist2 = MAX_DIST * MAX_DIST;
-  const fw = width / MAX_DIST + 1;
-  const fh = height / MAX_DIST + 1;
+  let fw = width / MAX_DIST + 1;
+  let fh = height / MAX_DIST + 1;
 
   let RULE_SIZE = 3;
   let MAX_LINKS = [];
@@ -449,5 +449,10 @@
   }
   .buttons-row button {
     width: 100%;
+  }
+  @supports (not (backdrop-filter: blur())) {
+    .controls {
+      background-color: rgba(150, 150, 150, 0.95);
+    }
   }
 </style>

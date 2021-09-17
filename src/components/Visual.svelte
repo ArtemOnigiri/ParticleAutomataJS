@@ -37,7 +37,7 @@
       gradient.addColorStop(0, colors[a.type]);
       gradient.addColorStop(1, colors[b.type]);
       ctx.strokeStyle = gradient;
-      ctx.lineWidth = 3;
+      ctx.lineWidth = Math.max(8 - Math.hypot(a.x - b.x, a.y - b.y) / 4, 3);
       ctx.stroke();
     }
     for (let i = 0; i < fw; i++) {

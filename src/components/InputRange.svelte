@@ -15,7 +15,7 @@
   .wrapper {
     /* display: flex; */
     display: block;
-    font-weight: bold;
+    /* font-weight: bold; */
   }
   .wrapper:not(:last-child) {
     margin-bottom: 10px;
@@ -33,6 +33,7 @@
     text-overflow: ellipsis;
     text-transform: uppercase;
     overflow: hidden;
+    /* font-family: monospace; */
     font-size: 75%;
   }
   input {
