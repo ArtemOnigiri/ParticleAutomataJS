@@ -445,7 +445,9 @@
           </div>
         </div>
         <div class="controls-block">
-          <h2 class="controls-block__title">Particle brush</h2>
+          <h2 class="controls-block__title">
+            {getTranslation(lang, "particleBrush")}
+          </h2>
           <ParticleSelector
             colors={COLORS.slice(0, COUPLINGS.length)}
             bind:selectedId
@@ -461,7 +463,9 @@
         </div>
       </div> -->
     {:else}
-      <button on:click={() => (showSettings = true)}>Show settings</button>
+      <button on:click={() => (showSettings = true)}>
+        {getTranslation(lang, "showSettings")}
+      </button>
     {/if}
   </div>
 </main>

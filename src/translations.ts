@@ -1,4 +1,8 @@
 export default {
+  showSettings: {
+    en: "Show settings",
+    ru: "Показать настройки"
+  },
   hideSettings: {
     en: "Hide settings",
     ru: "Скрыть настройки"
@@ -45,6 +49,6 @@ export default {
   },
   particleBrush: {
     en: "Particle brush",
-    ru: "Кисть цастиц",
+    ru: "Кисть частиц",
   }
 }
