@@ -33,7 +33,7 @@
   let showSettings = true;
 
   let r = Number(new URLSearchParams(location.search).get("radius")) || 5;
-  let nodeCount = 10;
+  let nodeCount = 750;
   let MAX_DIST = 100;
   let speedMultiplier =
     Number(new URLSearchParams(location.search).get("temperature")) || 4;
