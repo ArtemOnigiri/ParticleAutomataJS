@@ -38,6 +38,7 @@
       gradient.addColorStop(1, colors[b.type]);
       ctx.strokeStyle = gradient;
       ctx.lineWidth = Math.max(10 - Math.hypot(a.x - b.x, a.y - b.y) / 4, 2);
+      // ctx.globalAlpha = ctx.lineWidth / 10;
       ctx.stroke();
     }
     for (let i = 0; i < fw; i++) {
@@ -45,6 +46,7 @@
         const field = fields[i][j];
         for (let k = 0; k < field.length; k++) {
           const a = field[k];
+          // ctx.globalAlpha = 1;
           drawCircle(a.x, a.y, a.type);
         }
       }

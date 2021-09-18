@@ -4,9 +4,17 @@
   import ParticleSelector from "./ParticleSelector.svelte";
   import type { Particle } from "../types";
   import { writable } from "svelte/store";
+  import TRANSLATIONS from "../translations";
+
+  function getTranslation(lang: string, key: string) {
+    const phrase: { [key: string]: string } = TRANSLATIONS[key];
+    return Object.keys(phrase).includes(lang) ? phrase[lang] : phrase["en"];
+  }
 
   let width: number = window.innerWidth;
   let height: number = window.innerHeight;
+
+  let lang = new URLSearchParams(location.search).get("lang") || "en";
 
   const COLORS = [
     "#fa1414",
@@ -18,6 +26,7 @@
     "#fa96d2",
     "#828282",
     "green",
+    "white",
   ];
 
   let showSettings = true;
@@ -28,6 +37,8 @@
   let speedMultiplier = 4;
   const BORDER = 10;
   let selectedId = 0;
+
+  let friction = 0.98;
 
   const maxDist2 = MAX_DIST * MAX_DIST;
   let fw = width / MAX_DIST + 1;
@@ -220,8 +231,8 @@
           const a = field[k];
           a.x += a.sx;
           a.y += a.sy;
-          a.sx *= 0.98;
-          a.sy *= 0.98;
+          a.sx *= friction;
+          a.sy *= friction;
           const magnitude = Math.sqrt(a.sx * a.sx + a.sy * a.sy);
           if (magnitude > 1) {
             a.sx /= magnitude;
@@ -350,7 +361,6 @@
     {r}
     colors={COLORS}
     on:click={(e) => {
-      console.log("add");
       addParticle(
         e.clientX + Math.random() - 0.5,
         e.clientY + Math.random() - 0.5,
@@ -360,66 +370,96 @@
   />
   <div class="controls" class:controls_opened={showSettings}>
     {#if showSettings}
-      <div class="controls-block">
-        <div class="buttons-row">
-          <button on:click={() => (showSettings = false)}>Hide settings</button>
-          <button on:click={copyRules}>Copy link</button>
+      <div class="controls__col">
+        <div class="controls-block">
+          <div class="buttons-row">
+            <button on:click={() => (showSettings = false)}>
+              {getTranslation(lang, "hideSettings")}
+            </button>
+            <button on:click={copyRules}>
+              {getTranslation(lang, "copyLink")}
+            </button>
+          </div>
         </div>
-      </div>
-      <div class="controls-block">
-        <h2 class="controls-block__title">Current world settings</h2>
-        <InputRange
-          name="Simulations per frame"
-          min={1}
-          max={20}
-          bind:value={simulationsPerFrame}
-        />
-        <InputRange
-          name="Speed multiplier"
-          min={1}
-          max={40}
-          bind:value={speedMultiplier}
-        />
-        <div class="buttons-row">
-          <button
-            on:click={() => {
-              fields = [];
-              for (let i = 0; i < fw; i++) {
-                fields.push([]);
-                for (let j = 0; j < fh; j++) {
-                  fields[i].push([]);
+        <div class="controls-block">
+          <h2 class="controls-block__title">
+            {getTranslation(lang, "currentWorldSettings")}
+          </h2>
+          <InputRange
+            name={getTranslation(lang, "simulationsPerFrame")}
+            min={1}
+            max={100}
+            bind:value={simulationsPerFrame}
+          />
+          <InputRange
+            name={getTranslation(lang, "temperature")}
+            min={0.1}
+            max={40}
+            step={0.1}
+            bind:value={speedMultiplier}
+          />
+          <InputRange
+            name={getTranslation(lang, "friction")}
+            min={0}
+            max={1}
+            step={0.01}
+            bind:value={friction}
+          />
+          <div class="buttons-row">
+            <button
+              on:click={() => {
+                fields = [];
+                for (let i = 0; i < fw; i++) {
+                  fields.push([]);
+                  for (let j = 0; j < fh; j++) {
+                    fields[i].push([]);
+                  }
                 }
-              }
-              links = [];
-            }}>Delete all particles</button
-          >
+                links = [];
+              }}
+            >
+              {getTranslation(lang, "killAllParticles")}
+            </button>
+          </div>
+        </div>
+        <div class="controls-block">
+          <h2 class="controls-block__title">
+            {getTranslation(lang, "newWorldSettings")}
+          </h2>
+          <InputRange
+            name={getTranslation(lang, "particleTypesAmount")}
+            bind:value={$settingRuleSize}
+            min={1}
+            max={COLORS.length}
+          />
+          <InputRange
+            name={getTranslation(lang, "particleCount")}
+            bind:value={nodeCount}
+            min={0}
+            max={5000}
+          />
+          <div class="buttons-row">
+            <button on:click={startNew}>
+              {getTranslation(lang, "createNewWorld")}
+            </button>
+          </div>
+        </div>
+        <div class="controls-block">
+          <h2 class="controls-block__title">Particle brush</h2>
+          <ParticleSelector
+            colors={COLORS.slice(0, COUPLINGS.length)}
+            bind:selectedId
+          />
         </div>
       </div>
-      <div class="controls-block">
-        <h2 class="controls-block__title">New world settings</h2>
-        <InputRange
-          name="Colors"
-          bind:value={$settingRuleSize}
-          min={1}
-          max={COLORS.length}
-        />
-        <InputRange
-          name="Node count"
-          bind:value={nodeCount}
-          min={0}
-          max={5000}
-        />
-        <div class="buttons-row">
-          <button on:click={startNew}>Create new world</button>
+      <!-- <div class="controls__col">
+        <div class="controls-block">
+          <h2 class="controls-block__title">View settings</h2>
+          <div class="buttons-row">
+            <button on:click={startNew}>Show connections</button>
+          </div>
         </div>
-      </div>
-      <div class="controls-block">
-        <h2 class="controls-block__title">Particle brush</h2>
-        <ParticleSelector
-          colors={COLORS.slice(0, COUPLINGS.length)}
-          bind:selectedId
-        />
-      </div>
+      </div> -->
     {:else}
       <button on:click={() => (showSettings = true)}>Show settings</button>
     {/if}
@@ -427,7 +467,15 @@
 </main>
 
 <style>
+  button {
+    padding: 8px 15px;
+    /* white-space: nowrap; */
+    /* overflow: hidden;
+    text-overflow: ellipsis; */
+  }
   .controls {
+    display: flex;
+    flex-direction: row;
     position: fixed;
     /* width: 300px; */
     left: 20px;
@@ -441,8 +489,16 @@
   }
   .controls_opened {
     padding: 10px;
-    width: 300px;
+    /* width: 300px; */
     border-radius: 10px;
+  }
+  .controls__col {
+    min-width: 300px;
+    max-width: 300px;
+  }
+  .controls__col + .controls__col {
+    /* min-width: 300px; */
+    margin-left: 10px;
   }
   .controls-block > * {
     margin-bottom: 0;
