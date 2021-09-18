@@ -363,6 +363,7 @@
       <div class="controls-block">
         <div class="buttons-row">
           <button on:click={() => (showSettings = false)}>Hide settings</button>
+          <button on:click={copyRules}>Copy link</button>
         </div>
       </div>
       <div class="controls-block">
@@ -380,7 +381,18 @@
           bind:value={speedMultiplier}
         />
         <div class="buttons-row">
-          <button on:click={copyRules}>Copy link</button>
+          <button
+            on:click={() => {
+              fields = [];
+              for (let i = 0; i < fw; i++) {
+                fields.push([]);
+                for (let j = 0; j < fh; j++) {
+                  fields[i].push([]);
+                }
+              }
+              links = [];
+            }}>Delete all particles</button
+          >
         </div>
       </div>
       <div class="controls-block">
