@@ -17,7 +17,7 @@ export default {
   },
   simulationsPerFrame: {
     en: "Simulations per frame",
-    ru: "Кадров за шаг симуляции",
+    ru: "Шагов симуляции за кадр",
   },
   temperature: {
     en: "Temperature",
@@ -50,5 +50,17 @@ export default {
   particleBrush: {
     en: "Particle brush",
     ru: "Кисть частиц",
+  },
+  graphicalSettings: {
+    en: "Graphical settings",
+    ru: "Настройки просмотра",
+  },
+  drawConnections: {
+    en: "Draw connections",
+    ru: "Отображать соединения",
+  },
+  particleRadius: {
+    en: "Particle radius",
+    ru: "Радиус частицы",
   }
 }

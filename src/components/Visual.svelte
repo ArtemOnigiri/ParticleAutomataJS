@@ -10,10 +10,11 @@
   export let fh: number;
   export let r: number;
   export let colors: string[];
+  export let drawConnections = true;
 
   let canvas: HTMLCanvasElement;
 
-  const BG_COLOR = "black";
+  const BG_COLOR = "#141e46";
   const LINK_COLOR = "rgba(255, 230, 0, 0.7)";
 
   afterUpdate(() => {
@@ -27,19 +28,24 @@
     const ctx = canvas.getContext("2d");
     ctx.fillStyle = BG_COLOR;
     ctx.fillRect(0, 0, width, height);
-    for (let i = 0; i < links.length; i++) {
-      const a = links[i].a;
-      const b = links[i].b;
-      ctx.beginPath();
-      ctx.moveTo(a.x, a.y);
-      ctx.lineTo(b.x, b.y);
-      const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
-      gradient.addColorStop(0, colors[a.type]);
-      gradient.addColorStop(1, colors[b.type]);
-      ctx.strokeStyle = gradient;
-      ctx.lineWidth = Math.max(10 - Math.hypot(a.x - b.x, a.y - b.y) / 4, 2);
-      // ctx.globalAlpha = ctx.lineWidth / 10;
-      ctx.stroke();
+    if (drawConnections) {
+      for (let i = 0; i < links.length; i++) {
+        const a = links[i].a;
+        const b = links[i].b;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        const gradient = ctx.createLinearGradient(a.x, a.y, b.x, b.y);
+        gradient.addColorStop(0, colors[a.type]);
+        gradient.addColorStop(1, colors[b.type]);
+        ctx.strokeStyle = gradient;
+        ctx.lineWidth = Math.max(
+          r * 2 - Math.hypot(a.x - b.x, a.y - b.y) / 4,
+          2
+        );
+        // ctx.globalAlpha = ctx.lineWidth / 10;
+        ctx.stroke();
+      }
     }
     for (let i = 0; i < fw; i++) {
       for (let j = 0; j < fh; j++) {

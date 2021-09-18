@@ -1,6 +1,7 @@
 <script lang="ts">
   import Visual from "./Visual.svelte";
   import InputRange from "./InputRange.svelte";
+  import Checkbox from "./Checkbox.svelte";
   import ParticleSelector from "./ParticleSelector.svelte";
   import type { Particle } from "../types";
   import { writable } from "svelte/store";
@@ -31,14 +32,18 @@
 
   let showSettings = true;
 
-  const r = 5;
-  let nodeCount = 750;
+  let r = Number(new URLSearchParams(location.search).get("radius")) || 5;
+  let nodeCount = 10;
   let MAX_DIST = 100;
-  let speedMultiplier = 4;
+  let speedMultiplier =
+    Number(new URLSearchParams(location.search).get("temperature")) || 4;
   const BORDER = 10;
   let selectedId = 0;
 
-  let friction = 0.98;
+  let friction =
+    Number(new URLSearchParams(location.search).get("friction")) || 0.98;
+
+  let drawConnections = true;
 
   const maxDist2 = MAX_DIST * MAX_DIST;
   let fw = width / MAX_DIST + 1;
@@ -347,6 +352,20 @@
     fields = [...fields];
     window.requestAnimationFrame(update);
   }
+
+  // $: {
+  //   const searchParams = new URLSearchParams(
+  //     `?temperature=${speedMultiplier}&friction=${friction}&radius=${r}`
+  //   );
+  //   const newurl =
+  //     window.location.protocol +
+  //     "//" +
+  //     window.location.host +
+  //     window.location.pathname +
+  //     "?" +
+  //     searchParams.toString();
+  //   window.history.replaceState({ path: newurl }, "", newurl);
+  // }
 </script>
 
 <svelte:window bind:innerWidth={width} bind:innerHeight={height} />
@@ -359,6 +378,7 @@
     {fw}
     {fh}
     {r}
+    {drawConnections}
     colors={COLORS}
     on:click={(e) => {
       addParticle(
@@ -370,90 +390,107 @@
   />
   <div class="controls" class:controls_opened={showSettings}>
     {#if showSettings}
-      <div class="controls__col">
-        <div class="controls-block">
-          <div class="buttons-row">
-            <button on:click={() => (showSettings = false)}>
-              {getTranslation(lang, "hideSettings")}
-            </button>
-            <button on:click={copyRules}>
-              {getTranslation(lang, "copyLink")}
-            </button>
-          </div>
-        </div>
-        <div class="controls-block">
-          <h2 class="controls-block__title">
-            {getTranslation(lang, "currentWorldSettings")}
-          </h2>
-          <InputRange
-            name={getTranslation(lang, "simulationsPerFrame")}
-            min={1}
-            max={100}
-            bind:value={simulationsPerFrame}
-          />
-          <InputRange
-            name={getTranslation(lang, "temperature")}
-            min={0.1}
-            max={40}
-            step={0.1}
-            bind:value={speedMultiplier}
-          />
-          <InputRange
-            name={getTranslation(lang, "friction")}
-            min={0}
-            max={1}
-            step={0.01}
-            bind:value={friction}
-          />
-          <div class="buttons-row">
-            <button
-              on:click={() => {
-                fields = [];
-                for (let i = 0; i < fw; i++) {
-                  fields.push([]);
-                  for (let j = 0; j < fh; j++) {
-                    fields[i].push([]);
-                  }
-                }
-                links = [];
-              }}
-            >
-              {getTranslation(lang, "killAllParticles")}
-            </button>
-          </div>
-        </div>
-        <div class="controls-block">
-          <h2 class="controls-block__title">
-            {getTranslation(lang, "newWorldSettings")}
-          </h2>
-          <InputRange
-            name={getTranslation(lang, "particleTypesAmount")}
-            bind:value={$settingRuleSize}
-            min={1}
-            max={COLORS.length}
-          />
-          <InputRange
-            name={getTranslation(lang, "particleCount")}
-            bind:value={nodeCount}
-            min={0}
-            max={5000}
-          />
-          <div class="buttons-row">
-            <button on:click={startNew}>
-              {getTranslation(lang, "createNewWorld")}
-            </button>
-          </div>
-        </div>
-        <div class="controls-block">
-          <h2 class="controls-block__title">
-            {getTranslation(lang, "particleBrush")}
-          </h2>
-          <ParticleSelector
-            colors={COLORS.slice(0, COUPLINGS.length)}
-            bind:selectedId
-          />
+      <!-- <div class="controls__col"> -->
+      <div class="controls-block">
+        <div class="buttons-row">
+          <button on:click={() => (showSettings = false)}>
+            {getTranslation(lang, "hideSettings")}
+          </button>
+          <button on:click={copyRules}>
+            {getTranslation(lang, "copyLink")}
+          </button>
         </div>
       </div>
+      <div class="controls-block">
+        <h2 class="controls-block__title">
+          {getTranslation(lang, "currentWorldSettings")}
+        </h2>
+        <InputRange
+          name={getTranslation(lang, "simulationsPerFrame")}
+          min={1}
+          max={100}
+          bind:value={simulationsPerFrame}
+        />
+        <InputRange
+          name={getTranslation(lang, "temperature")}
+          min={0.1}
+          max={40}
+          step={0.1}
+          bind:value={speedMultiplier}
+        />
+        <InputRange
+          name={getTranslation(lang, "friction")}
+          min={0}
+          max={1}
+          step={0.01}
+          bind:value={friction}
+        />
+        <InputRange
+          name={getTranslation(lang, "particleRadius")}
+          min={3}
+          max={10}
+          step={0.01}
+          bind:value={r}
+        />
+        <div class="buttons-row">
+          <button
+            on:click={() => {
+              fields = [];
+              for (let i = 0; i < fw; i++) {
+                fields.push([]);
+                for (let j = 0; j < fh; j++) {
+                  fields[i].push([]);
+                }
+              }
+              links = [];
+            }}
+          >
+            {getTranslation(lang, "killAllParticles")}
+          </button>
+        </div>
+      </div>
+      <div class="controls-block">
+        <h2 class="controls-block__title">
+          {getTranslation(lang, "newWorldSettings")}
+        </h2>
+        <InputRange
+          name={getTranslation(lang, "particleTypesAmount")}
+          bind:value={$settingRuleSize}
+          min={1}
+          max={COLORS.length}
+        />
+        <InputRange
+          name={getTranslation(lang, "particleCount")}
+          bind:value={nodeCount}
+          min={0}
+          max={5000}
+        />
+        <div class="buttons-row">
+          <button on:click={startNew}>
+            {getTranslation(lang, "createNewWorld")}
+          </button>
+        </div>
+      </div>
+      <div class="controls-block">
+        <h2 class="controls-block__title">
+          {getTranslation(lang, "particleBrush")}
+        </h2>
+        <ParticleSelector
+          colors={COLORS.slice(0, COUPLINGS.length)}
+          bind:selectedId
+        />
+      </div>
+
+      <div class="controls-block">
+        <h2 class="controls-block__title">
+          {getTranslation(lang, "graphicalSettings")}
+        </h2>
+        <Checkbox
+          title={getTranslation(lang, "drawConnections")}
+          bind:checked={drawConnections}
+        />
+      </div>
+      <!-- </div> -->
       <!-- <div class="controls__col">
         <div class="controls-block">
           <h2 class="controls-block__title">View settings</h2>
@@ -478,10 +515,13 @@
     text-overflow: ellipsis; */
   }
   .controls {
-    display: flex;
-    flex-direction: row;
+    overflow-y: scroll;
+    box-shadow: 0 0 10px 0 black;
+    /* display: flex; */
+    /* flex-direction: row; */
     position: fixed;
     /* width: 300px; */
+    max-height: calc(100% - 40px);
     left: 20px;
     top: 20px;
     background-color: rgba(255, 255, 255, 0.5);
@@ -489,11 +529,16 @@
     border-radius: 5px;
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
     transition-duration: 0.2s;
+  }
+  .controls::-webkit-scrollbar {
+    display: none;
   }
   .controls_opened {
     padding: 10px;
-    /* width: 300px; */
+    width: 300px;
     border-radius: 10px;
   }
   .controls__col {
