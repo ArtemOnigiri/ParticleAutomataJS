@@ -12,6 +12,7 @@
   label {
     display: inline-block;
     cursor: pointer;
+    margin-bottom: 5px;
   }
   input {
     position: relative;

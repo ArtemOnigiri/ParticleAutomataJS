@@ -47,6 +47,7 @@
 
   let drawConnections = true;
   let changeFormBySpeed = true;
+  let displacementMultiplier = 1;
 
   const maxDist2 = MAX_DIST * MAX_DIST;
   let fw = width / MAX_DIST + 1;
@@ -386,6 +387,7 @@
     {r}
     {drawConnections}
     {changeFormBySpeed}
+    {displacementMultiplier}
     colors={COLORS}
     on:click={(e) => {
       addParticle(
@@ -499,6 +501,13 @@
         <Checkbox
           title={getTranslation(lang, "changeFormBySpeed")}
           bind:checked={changeFormBySpeed}
+        />
+        <InputRange
+          name={getTranslation(lang, "displacementMultiplier")}
+          min={1}
+          max={10}
+          step={1}
+          bind:value={displacementMultiplier}
         />
       </div>
       <!-- </div> -->

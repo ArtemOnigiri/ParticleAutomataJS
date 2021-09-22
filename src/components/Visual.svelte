@@ -12,6 +12,7 @@
   export let colors: string[];
   export let drawConnections = true;
   export let changeFormBySpeed = true;
+  export let displacementMultiplier = 1;
 
   let canvas: HTMLCanvasElement;
 
@@ -42,7 +43,7 @@
       ctx.ellipse(
         p.x,
         p.y,
-        Math.min(r * (speed ** 2 + 1), 10),
+        Math.min(r * ((speed * displacementMultiplier) ** 2 + 1), 10),
         r,
         angle,
         0,

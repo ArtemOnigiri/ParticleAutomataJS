@@ -34,7 +34,7 @@
     text-transform: uppercase;
     overflow: hidden;
     /* font-family: monospace; */
-    font-size: 75%;
+    font-size: 65%;
   }
   input {
     margin-top: 2px;

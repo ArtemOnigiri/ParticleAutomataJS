@@ -66,5 +66,9 @@ export default {
   changeFormBySpeed: {
     en: "Change particle form by speed",
     ru: "Искажать форму частицы в зависимости от скорости",
+  },
+  displacementMultiplier: {
+    en: "Displacement multiplier",
+    ru: "Множитель искажения",
   }
 } as { [phrase: string]: { [lang: string]: string } };
