@@ -11,6 +11,7 @@
   export let r: number;
   export let colors: string[];
   export let drawConnections = true;
+  export let changeFormBySpeed = true;
 
   let canvas: HTMLCanvasElement;
 
@@ -18,11 +19,43 @@
   const LINK_COLOR = "rgba(255, 230, 0, 0.7)";
 
   afterUpdate(() => {
-    function drawCircle(x: number, y: number, type: number) {
-      ctx.fillStyle = colors[type] || "white";
+    function drawCircle(p: Particle) {
+      ctx.fillStyle = colors[p.type] || "white";
       ctx.beginPath();
-      ctx.arc(x, y, r, 0, 2 * Math.PI);
+      ctx.arc(p.x, p.y, r, 0, 2 * Math.PI);
       ctx.fill();
+      // ctx.fillRect(x - 5, y - 5, 10, 10);
+    }
+    function drawCircle2(p: Particle) {
+      function lineEnd(
+        x: number,
+        y: number,
+        angle: number,
+        length: number
+      ): [number, number] {
+        return [x + Math.cos(angle) * length, y + Math.sin(angle) * length];
+      }
+      const angle = Math.atan2(p.y - p.lastY, p.x - p.lastX);
+      const speed = Math.hypot(p.x - p.lastX, p.y - p.lastY);
+      ctx.fillStyle = colors[p.type] || "white";
+      ctx.beginPath();
+      ctx.ellipse(
+        p.x,
+        p.y,
+        Math.min(r * (speed ** 2 + 1), 10),
+        r,
+        angle,
+        0,
+        Math.PI * 2
+      );
+      ctx.fill();
+      // ctx.beginPath();
+      // ctx.moveTo(p.x, p.y);
+      // ctx.lineTo(...lineEnd(p.x, p.y, angle, 10));
+      // ctx.lineWidth = 1;
+      // ctx.strokeStyle = "white";
+      // ctx.stroke();
+
       // ctx.fillRect(x - 5, y - 5, 10, 10);
     }
     const ctx = canvas.getContext("2d");
@@ -53,7 +86,11 @@
         for (let k = 0; k < field.length; k++) {
           const a = field[k];
           // ctx.globalAlpha = 1;
-          drawCircle(a.x, a.y, a.type);
+          if (changeFormBySpeed) {
+            drawCircle2(a);
+          } else {
+            drawCircle(a);
+          }
         }
       }
     }

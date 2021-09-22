@@ -24,8 +24,8 @@ export default {
     ru: "Температура",
   },
   friction: {
-    en: "Friction",
-    ru: "Трение",
+    en: "Anti-friction",
+    ru: "Анти-трение",
   },
   killAllParticles: {
     en: "Kill all particles",
@@ -62,5 +62,9 @@ export default {
   particleRadius: {
     en: "Particle radius",
     ru: "Радиус частицы",
+  },
+  changeFormBySpeed: {
+    en: "Change particle form by speed",
+    ru: "Искажать форму частицы в зависимости от скорости",
   }
-}
+} as { [phrase: string]: { [lang: string]: string } };

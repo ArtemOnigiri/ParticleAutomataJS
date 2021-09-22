@@ -33,8 +33,10 @@
   let showSettings = true;
 
   let r = Number(new URLSearchParams(location.search).get("radius")) || 5;
-  let nodeCount = 750;
-  let MAX_DIST = 100;
+  let nodeCount =
+    Number(new URLSearchParams(location.search).get("count")) || 750;
+  let MAX_DIST =
+    Number(new URLSearchParams(location.search).get("max_dist")) || 100;
   let speedMultiplier =
     Number(new URLSearchParams(location.search).get("temperature")) || 4;
   const BORDER = 10;
@@ -44,6 +46,7 @@
     Number(new URLSearchParams(location.search).get("friction")) || 0.98;
 
   let drawConnections = true;
+  let changeFormBySpeed = true;
 
   const maxDist2 = MAX_DIST * MAX_DIST;
   let fw = width / MAX_DIST + 1;
@@ -234,6 +237,8 @@
         const field = fields[i][j];
         for (let k = 0; k < field.length; k++) {
           const a = field[k];
+          a.lastX = a.x;
+          a.lastY = a.y;
           a.x += a.sx;
           a.y += a.sy;
           a.sx *= friction;
@@ -288,6 +293,7 @@
         if (dist2 > r * r * 4) {
           const angle = Math.atan2(a.y - b.y, a.x - b.x);
           const dA = -0.015;
+
           a.sx += Math.cos(angle) * dA * speedMultiplier;
           a.sy += Math.sin(angle) * dA * speedMultiplier;
           b.sx -= Math.cos(angle) * dA * speedMultiplier;
@@ -379,6 +385,7 @@
     {fh}
     {r}
     {drawConnections}
+    {changeFormBySpeed}
     colors={COLORS}
     on:click={(e) => {
       addParticle(
@@ -488,6 +495,10 @@
         <Checkbox
           title={getTranslation(lang, "drawConnections")}
           bind:checked={drawConnections}
+        />
+        <Checkbox
+          title={getTranslation(lang, "changeFormBySpeed")}
+          bind:checked={changeFormBySpeed}
         />
       </div>
       <!-- </div> -->
