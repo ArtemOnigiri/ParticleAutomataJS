@@ -502,13 +502,15 @@
           title={getTranslation(lang, "changeFormBySpeed")}
           bind:checked={changeFormBySpeed}
         />
-        <InputRange
-          name={getTranslation(lang, "displacementMultiplier")}
-          min={1}
-          max={10}
-          step={1}
-          bind:value={displacementMultiplier}
-        />
+        {#if changeFormBySpeed}
+          <InputRange
+            name={getTranslation(lang, "displacementMultiplier")}
+            min={1}
+            max={10}
+            step={1}
+            bind:value={displacementMultiplier}
+          />
+        {/if}
       </div>
       <!-- </div> -->
       <!-- <div class="controls__col">
@@ -530,6 +532,8 @@
 <style>
   button {
     padding: 8px 15px;
+    color: inherit;
+    font-size: 13px;
     /* white-space: nowrap; */
     /* overflow: hidden;
     text-overflow: ellipsis; */
@@ -587,7 +591,8 @@
   .buttons-row button {
     width: 100%;
   }
-  @supports (not (backdrop-filter: blur())) {
+  @supports (not (backdrop-filter: blur())) and
+    (not (-webkit-backdrop-filter: blur())) {
     .controls {
       background-color: rgba(150, 150, 150, 0.95);
     }

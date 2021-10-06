@@ -17,7 +17,8 @@
   let canvas: HTMLCanvasElement;
 
   const BG_COLOR = "#141e46";
-  const LINK_COLOR = "rgba(255, 230, 0, 0.7)";
+  document.body.style.backgroundColor = BG_COLOR;
+  // const LINK_COLOR = "rgba(255, 230, 0, 0.7)";
 
   afterUpdate(() => {
     function drawCircle(p: Particle) {
