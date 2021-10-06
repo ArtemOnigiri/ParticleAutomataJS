@@ -10,45 +10,48 @@
 
 <style>
   label {
-    display: inline-block;
+    display: block;
     cursor: pointer;
     margin-bottom: 5px;
   }
   input {
+    user-select: none;
     position: relative;
     appearance: none;
-    margin: 0;
-    padding: 0;
+    -webkit-appearance: none;
+    margin: 0px 5px 0px 0px;
+    outline: none;
+    border: none;
   }
+
   input::before {
     content: "";
-    position: absolute;
+    box-sizing: border-box;
+    transform: translate(0px, 2px);
     display: block;
     width: 15px;
     height: 15px;
-    transform: translate(0, -14px);
-    border-radius: 3px;
+    border-radius: 2px;
     background-color: rgba(255, 255, 255, 0.3);
+    transition-duration: 0.2s;
   }
-  input::after {
+
+  input:after {
     content: "";
     position: absolute;
     display: block;
-    width: 5px;
-    height: 10px;
-    border-bottom: 3px solid;
-    border-right: 3px solid;
-    border-color: rgb(255, 255, 255);
+    left: 1px;
+    top: 3px;
+    width: 10px;
+    height: 5px;
+    transform: translateY(-2px) rotateZ(-45deg);
+    border-bottom: 4px solid whitesmoke;
+    border-left: 4px solid whitesmoke;
     opacity: 0;
-    transform: translate(4px, -16px) rotate(45deg);
-    /* background-color: red; */
     transition-duration: 0.2s;
   }
   input:checked::after {
+    transform: rotateZ(-45deg);
     opacity: 1;
-    transform: translate(4px, -14px) rotate(45deg);
-  }
-  span {
-    margin-left: 20px;
   }
 </style>
