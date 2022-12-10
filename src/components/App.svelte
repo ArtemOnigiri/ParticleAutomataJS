@@ -102,6 +102,11 @@
     generateNodes();
   }
 
+  function refresh() {
+    selectedId = 0;
+    generateNodes();
+  }
+
   function generateNodes() {
     links = [];
     fields = [];
@@ -474,9 +479,12 @@
           min={0}
           max={5000}
         />
-        <div class="buttons-row">
+        <div class="buttons-row buttons-column">
           <button on:click={startNew}>
             {getTranslation(lang, "createNewWorld")}
+          </button>
+          <button on:click={refresh}>
+            {getTranslation(lang, "refreshWorld")}
           </button>
         </div>
       </div>
@@ -588,8 +596,15 @@
   .buttons-row {
     display: flex;
   }
+  .buttons-column {
+    flex-direction: column;
+    gap: 10px;
+  }
   .buttons-row button {
     width: 100%;
+  }
+  .buttons-column button {
+    margin: 0;
   }
   @supports (not (backdrop-filter: blur())) and
     (not (-webkit-backdrop-filter: blur())) {
