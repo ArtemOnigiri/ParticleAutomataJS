@@ -47,6 +47,10 @@ export default {
     en: "Create new world",
     ru: "Создать новый мир",
   },
+  refreshWorld: {
+    en: "Refresh world",
+    ru: "Обновить мир",
+  },
   particleBrush: {
     en: "Particle brush",
     ru: "Кисть частиц",
